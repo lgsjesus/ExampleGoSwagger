@@ -1,0 +1,411 @@
+definitions:
+  controllers.Response:
+    properties:
+      data:
+        type: object
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  controllers.ResponseError:
+    properties:
+      message:
+        example: Error message
+        type: string
+      success:
+        example: false
+        type: boolean
+    type: object
+  dtos.CustomerDto:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone:
+        type: string
+    type: object
+  dtos.ProductDto:
+    properties:
+      description:
+        description: Review is optional, can be nil
+        type: string
+      id:
+        description: ID is the primary key, not required for creation
+        type: integer
+      image:
+        description: Image is optional, can be nil
+        type: string
+      price:
+        description: Price is required for product creation
+        type: number
+      title:
+        description: Title is required for product creation
+        type: string
+    type: object
+  dtos.UserDto:
+    properties:
+      id:
+        description: ID is not required for creation, so no validation
+        type: integer
+      nickname:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: lguilherme.j@gmail.com
+    name: Luiz Guilherme de Jesus
+    url: http://www.swagger.io/support
+  description: This is a sample server Customer server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Documentation of Customer API
+  version: "1.0"
+paths:
+  /User:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided details.
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UserDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.UserDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Add a user
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Create a new user with the provided details.
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.UserDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Update a user
+      tags:
+      - User
+  /User/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a existent user with the provided details.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.UserDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Get a user
+      tags:
+      - User
+  /customer:
+    post:
+      consumes:
+      - application/json
+      description: Create a new customer with the provided details.
+      parameters:
+      - description: Customer details
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CustomerDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.CustomerDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Add a customer
+      tags:
+      - Customer
+    put:
+      consumes:
+      - application/json
+      description: Update a new customer with the provided details.
+      parameters:
+      - description: Customer details
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CustomerDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.CustomerDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Update a customer
+      tags:
+      - Customer
+  /customer/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get a existent customer with the provided details.
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.CustomerDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Get a customer
+      tags:
+      - Customer
+  /product/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get an existent Product with the provided details.
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.ProductDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Get a Product
+      tags:
+      - Product
+  /product/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all existent Products with the provided details.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dtos.ProductDto'
+                  type: array
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Get all Products
+      tags:
+      - Product
+swagger: "2.0"
