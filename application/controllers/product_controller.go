@@ -49,6 +49,7 @@ func MakeHandlersProduct(r *mux.Router, n *negroni.Negroni) {
 //		@Failure      400  {object}  ResponseError
 //		@Failure      404  {object}  ResponseError
 //		@Failure      500  {object}  ResponseError
+//	 @Failure      401  {object}  ResponseError
 func getProduct(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -89,6 +90,7 @@ func getProduct(w http.ResponseWriter, r *http.Request) {
 //	@Failure      400  {object}  ResponseError
 //	@Failure      404  {object}  ResponseError
 //	@Failure      500  {object}  ResponseError
+//	 @Failure      401  {object}  ResponseError
 func getProducts(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := http.Get(urlServiceProduct)
@@ -114,18 +116,6 @@ func getProducts(w http.ResponseWriter, r *http.Request) {
 		JsonError(http.StatusInternalServerError, w, "Error empty body ")
 		return
 	}
-
-	/*decoder := json.NewDecoder(resp.Body)
-
-	for {
-		var dto dtos.ProductDto
-		if err := decoder.Decode(&dto); err != nil {
-			if err.Error() == "EOF" {
-				break
-			}
-			productDto = append(productDto, dto)
-		}
-	}*/
 	if err := json.Unmarshal(bodyBytes, &productDto); err != nil {
 		JsonError(http.StatusInternalServerError, w, "Error convert to struct"+err.Error())
 		return
@@ -134,9 +124,9 @@ func getProducts(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleGetProduct() http.Handler {
-	return http.HandlerFunc(getProduct)
+	return JWTMiddlewareValidationToken(http.HandlerFunc(getProduct))
 }
 
 func handleGetProducts() http.Handler {
-	return http.HandlerFunc(getProducts)
+	return JWTMiddlewareValidationToken(http.HandlerFunc(getProducts))
 }

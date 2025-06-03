@@ -60,17 +60,18 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 // UpdateAnUser
 //
-//	@Tags			User
-//	@Summary		Update a user
-//	@Description	Create a new user with the provided details.
-//	@Accept			json
-//	@Produce		json
-//	@Router			/User [put]
-//	@Success      200  {object}   Response{data=dtos.UserDto,success=bool,message=string}
-//	@Param			user		body		dtos.UserDto	true	"User details"
-//	@Failure      400  {object}  ResponseError
-//	@Failure      404  {object}  ResponseError
-//	@Failure      500  {object}  ResponseError
+//		@Tags			User
+//		@Summary		Update a user
+//		@Description	Create a new user with the provided details.
+//		@Accept			json
+//		@Produce		json
+//		@Router			/User [put]
+//		@Success      200  {object}   Response{data=dtos.UserDto,success=bool,message=string}
+//		@Param			user		body		dtos.UserDto	true	"User details"
+//		@Failure      400  {object}  ResponseError
+//		@Failure      404  {object}  ResponseError
+//		@Failure      500  {object}  ResponseError
+//	 @Failure      401  {object}  ResponseError
 func updateUser(w http.ResponseWriter, r *http.Request) {
 	var userDto dtos.UserDto
 
@@ -96,17 +97,18 @@ func updateUser(w http.ResponseWriter, r *http.Request) {
 
 // GetAnUser
 //
-//	@Tags			User
-//	@Summary		Get a user
-//	@Description	Get a existent user with the provided details.
-//	@Accept			json
-//	@Produce		json
-//	@Router			/User/{id} [get]
-//	@Success      200  {object}   Response{data=dtos.UserDto,success=bool,message=string}
-//	@Param		   id	path		int				true	"User ID"
-//	@Failure      400  {object}  ResponseError
-//	@Failure      404  {object}  ResponseError
-//	@Failure      500  {object}  ResponseError
+//		@Tags			User
+//		@Summary		Get a user
+//		@Description	Get a existent user with the provided details.
+//		@Accept			json
+//		@Produce		json
+//		@Router			/User/{id} [get]
+//		@Success      200  {object}   Response{data=dtos.UserDto,success=bool,message=string}
+//		@Param		   id	path		int				true	"User ID"
+//		@Failure      400  {object}  ResponseError
+//		@Failure      404  {object}  ResponseError
+//		@Failure      500  {object}  ResponseError
+//	 @Failure      401  {object}  ResponseError
 func getUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	strId := vars["id"]
@@ -133,9 +135,9 @@ func HandleCreateUser(service *services.UserService) http.Handler {
 }
 
 func HandleUpdateUser(service *services.UserService) http.Handler {
-	return http.HandlerFunc(updateUser)
+	return JWTMiddlewareValidationToken(http.HandlerFunc(updateUser))
 }
 
 func HandleGetUser(service *services.UserService) http.Handler {
-	return http.HandlerFunc(getUser)
+	return JWTMiddlewareValidationToken(http.HandlerFunc(getUser))
 }

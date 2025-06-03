@@ -51,6 +51,10 @@ func init() {
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 
 //	@host		localhost:5000
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description Provide your JWT token as: Bearer <token>
 
 func main() {
 	// Initialize the database connection
@@ -74,7 +78,9 @@ func main() {
 	customerService := services.NewCustomerService(rc)
 	ru := repositories.NewUserRepositoryDb(db.Db)
 	userService := services.NewUserService(ru)
+	authService := services.NewAuthService(ru)
 
+	controllers.MakeHandlersAuth(r, n, authService)
 	controllers.MakeHandlersCustomer(r, n, customerService)
 	controllers.MakeHandlersProduct(r, n)
 	controllers.MakeHandlersUser(r, n, userService)

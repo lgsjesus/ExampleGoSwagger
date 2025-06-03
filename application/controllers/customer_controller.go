@@ -26,17 +26,18 @@ func MakeHandlersCustomer(r *mux.Router, n *negroni.Negroni,
 
 // CreateAnCustomer
 //
-//	@Tags			Customer
-//	@Summary		Add a customer
-//	@Description	Create a new customer with the provided details.
-//	@Accept			json
-//	@Produce		json
-//	@Router			/customer [post]
-//	@Success      201  {object}   Response{data=dtos.CustomerDto,success=bool,message=string}
-//	@Param			customer		body		dtos.CustomerDto	true	"Customer details"
-//	@Failure      400  {object}  ResponseError
-//	@Failure      404  {object}  ResponseError
-//	@Failure      500  {object}  ResponseError
+//		@Tags			Customer
+//		@Summary		Add a customer
+//		@Description	Create a new customer with the provided details.
+//		@Accept			json
+//		@Produce		json
+//		@Router			/customer [post]
+//		@Success      201  {object}   Response{data=dtos.CustomerDto,success=bool,message=string}
+//		@Param			customer		body		dtos.CustomerDto	true	"Customer details"
+//		@Failure      400  {object}  ResponseError
+//		@Failure      404  {object}  ResponseError
+//		@Failure      500  {object}  ResponseError
+//	 @Failure      401  {object}  ResponseError
 func create(w http.ResponseWriter, r *http.Request) {
 	var userDto dtos.CustomerDto
 
@@ -63,17 +64,18 @@ func create(w http.ResponseWriter, r *http.Request) {
 
 // GetAnCustomer
 //
-//		@Tags			Customer
-//		@Summary		Get a customer
-//		@Description	Get a existent customer with the provided details.
-//		@Accept			json
-//		@Produce		json
-//		@Router			/customer/{id} [Get]
-//		 @Success      200  {object}   Response{data=dtos.CustomerDto,success=bool,message=string}
-//	     @Param		   id	path		int				true	"Customer ID"
-//		 @Failure      400  {object}  ResponseError
-//		 @Failure      404  {object}  ResponseError
-//		 @Failure      500  {object}  ResponseError
+//			@Tags			Customer
+//			@Summary		Get a customer
+//			@Description	Get a existent customer with the provided details.
+//			@Accept			json
+//			@Produce		json
+//			@Router			/customer/{id} [Get]
+//			 @Success      200  {object}   Response{data=dtos.CustomerDto,success=bool,message=string}
+//		     @Param		   id	path		int				true	"Customer ID"
+//			 @Failure      400  {object}  ResponseError
+//			 @Failure      404  {object}  ResponseError
+//			 @Failure      500  {object}  ResponseError
+//	     @Failure      401  {object}  ResponseError
 func get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
@@ -97,17 +99,18 @@ func get(w http.ResponseWriter, r *http.Request) {
 
 // UpdateAnCustomer
 //
-//	@Tags			Customer
-//	@Summary		Update a customer
-//	@Description	Update a new customer with the provided details.
-//	@Accept			json
-//	@Produce		json
-//	@Router			/customer [put]
-//	@Success      200  {object}   Response{data=dtos.CustomerDto,success=bool,message=string}
-//	@Param			customer		body		dtos.CustomerDto	true	"Customer details"
-//	@Failure      400  {object}  ResponseError
-//	@Failure      404  {object}  ResponseError
-//	@Failure      500  {object}  ResponseError
+//		@Tags			Customer
+//		@Summary		Update a customer
+//		@Description	Update a new customer with the provided details.
+//		@Accept			json
+//		@Produce		json
+//		@Router			/customer [put]
+//		@Success      200  {object}   Response{data=dtos.CustomerDto,success=bool,message=string}
+//		@Param			customer		body		dtos.CustomerDto	true	"Customer details"
+//		@Failure      400  {object}  ResponseError
+//		@Failure      404  {object}  ResponseError
+//		@Failure      500  {object}  ResponseError
+//	 @Failure      401  {object}  ResponseError
 func update(w http.ResponseWriter, r *http.Request) {
 	var userDto dtos.CustomerDto
 
@@ -143,13 +146,13 @@ func update(w http.ResponseWriter, r *http.Request) {
 
 func HandleCreateCustomer(service *services.CustomerService) http.Handler {
 
-	return http.HandlerFunc(create)
+	return JWTMiddlewareValidationToken(http.HandlerFunc(create))
 }
 
 func HandleUpdateCustomer(service *services.CustomerService) http.Handler {
-	return http.HandlerFunc(update)
+	return JWTMiddlewareValidationToken(http.HandlerFunc(update))
 }
 
 func HandleGetCustomer(service *services.CustomerService) http.Handler {
-	return http.HandlerFunc(get)
+	return JWTMiddlewareValidationToken(http.HandlerFunc(get))
 }

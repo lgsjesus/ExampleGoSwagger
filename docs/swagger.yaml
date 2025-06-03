@@ -17,6 +17,16 @@ definitions:
         example: false
         type: boolean
     type: object
+  dtos.AuthDto:
+    properties:
+      nickname:
+        type: string
+      password:
+        type: string
+    required:
+    - nickname
+    - password
+    type: object
   dtos.CustomerDto:
     properties:
       address:
@@ -74,6 +84,49 @@ info:
   title: Documentation of Customer API
   version: "1.0"
 paths:
+  /Auth:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate an User to Use APIs.
+      parameters:
+      - description: Token details
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.AuthDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/controllers.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dtos.AuthDto'
+                message:
+                  type: string
+                success:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+      summary: Authenticate an User to Use APIs
+      tags:
+      - Auth
   /User:
     post:
       consumes:
@@ -148,6 +201,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
         "404":
           description: Not Found
           schema:
@@ -188,6 +245,10 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/controllers.ResponseError'
         "404":
@@ -233,6 +294,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
         "404":
           description: Not Found
           schema:
@@ -275,6 +340,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
         "404":
           description: Not Found
           schema:
@@ -297,6 +366,11 @@ paths:
         name: id
         required: true
         type: integer
+      - description: MyHeader must be set for valid response
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -315,6 +389,10 @@ paths:
               type: object
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/controllers.ResponseError'
         "404":
@@ -359,6 +437,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
         "404":
           description: Not Found
           schema:
@@ -397,6 +479,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/controllers.ResponseError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/controllers.ResponseError'
         "404":
           description: Not Found
           schema:
@@ -408,4 +494,10 @@ paths:
       summary: Get all Products
       tags:
       - Product
+securityDefinitions:
+  BearerAuth:
+    description: 'Provide your JWT token as: Bearer <token>'
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

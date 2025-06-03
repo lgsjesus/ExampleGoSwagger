@@ -10,6 +10,7 @@ import (
 type UserRepository interface {
 	Insert(user *domain.User) (*domain.User, error)
 	Find(id int) (*domain.User, error)
+	FindByNickName(nick_name string) (*domain.User, error)
 	Update(user *domain.User) (*domain.User, error)
 }
 
@@ -71,6 +72,17 @@ func (repo UserRepositoryDb) Update(user *domain.User) (*domain.User, error) {
 		return nil, err
 	}
 	return user, nil
+}
+func (repo UserRepositoryDb) FindByNickName(nickName string) (*domain.User, error) {
+	var user domain.User
+	err := repo.Db.Where("nick_name = ?", nickName).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	if user.ID == 0 {
+		return nil, gorm.ErrRecordNotFound
+	}
+	return &user, nil
 }
 
 func (repo UserRepositoryDb) verifyDuplicateNickName(user *domain.User) error {

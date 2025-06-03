@@ -3,6 +3,7 @@ package services
 import (
 	"challenge.go.lgsjesus/application/dtos"
 	"challenge.go.lgsjesus/framework/repositories"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -24,7 +25,7 @@ func (s *UserService) CreateUser(userDto *dtos.UserDto) error {
 	if err != nil {
 		return err
 	}
-	user, err = s.repository.Insert(user)
+	_, err = s.repository.Insert(user)
 	if err != nil {
 		return err
 	}
@@ -52,4 +53,8 @@ func (s *UserService) UpdateUser(userDto *dtos.UserDto) (*dtos.UserDto, error) {
 		return nil, err
 	}
 	return userDto.NewUserDto(user), nil
+}
+func checkPassword(hashedPassword, password string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	return err == nil
 }
